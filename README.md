@@ -1,11 +1,17 @@
-# Simple FastAPI App for Azure
+# FastAPI + KaggleHub Model Deployment
 
-## Steps to Deploy
+This app uses FastAPI to serve a diabetic retinopathy model hosted on KaggleHub.
 
-1. Push this to GitHub.
-2. Create Azure Web App (Python stack).
-3. Set the startup command as:
+## How to Deploy on Azure
+
+1. Push this repo to GitHub.
+2. Create a Web App on Azure (Python).
+3. Set the Startup Command:
    ```
    uvicorn main:app --host 0.0.0.0 --port 8000
    ```
-4. App will run at `https://<your-app-name>.azurewebsites.net/`
+4. Add environment variables for KaggleHub access if needed.
+
+## Endpoint
+
+- `POST /DR` with an image file to get prediction.
