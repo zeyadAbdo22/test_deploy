@@ -9,6 +9,7 @@ from PIL import Image
 import io
 import os
 import kagglehub
+import requests
 
 app = FastAPI()
 
@@ -49,11 +50,19 @@ def make_prediction(model, img_array, class_labels, binary=False):
     label = class_labels[predicted_class]
     return label, confidence, prediction.tolist()
 
+def download_model_from_blob(url: str, dest_path: str):
+    if not os.path.exists(dest_path):
+        response = requests.get(url)
+        with open(dest_path, 'wb') as f:
+            f.write(response.content)
+
 def load_DR_model():
-    global DR_model 
-    path = kagglehub.model_download("zeyadabdo/diabetic-retinopathy-models/keras/vgg16-v1")
-    DR_model_path = os.path.join(path, "Diabetic-Retinopathy-vgg16-model.h5")
-    DR_model = load_model(DR_model_path, compile=False)   
+    global DR_model
+    model_url = "https://mydlmodels123.blob.core.windows.net/models/Diabetic-Retinopathy-ResNet50-model.h5"
+    local_path = "Diabetic-Retinopathy-ResNet50-model.h5"
+    download_model_from_blob(model_url, local_path)
+    DR_model = load_model(local_path, compile=False)
+
     
 @app.on_event("startup")
 async def load_models():
