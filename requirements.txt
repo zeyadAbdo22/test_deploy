@@ -5,3 +5,4 @@ pillow
 numpy
 kagglehub
 requests
+python-multipart
